@@ -1,0 +1,13 @@
+        <%= form_with(model:[book, book_comment], remote: true) do |f| %>
+          <% if book_comment.errors.any? %>
+            <div id="error_explanation">
+              <ul>
+                <% book_comment.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <%= f.text_area :comment, rows:'3',placeholder: "コメントをここに", :style=>"width:100%;" %>
+          <%= f.submit "送信する" %>
+        <% end %>
