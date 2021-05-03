@@ -12,7 +12,7 @@
                     <td>
                     <% if book_comment.user == current_user %>
                         <div class="comment-delete">
-                          <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-sm btn-danger destroy_book_#{@book.id}" %>
+                          <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-sm btn-danger destroy_book_#{@book.id}", remote: true %>
                         </div>
                     <% end %>
                     </td>
