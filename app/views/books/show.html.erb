@@ -20,8 +20,7 @@
           <td id="favs_buttons_<%= @book.id %>">
             <%= render partial: 'favorites/fav', locals: { book: @book} %>
           </td>
-          <td id="comments_count">
-            コメント数：<%= render partial: 'book_comments/count', locals: { book: @book } %>                </td>
+          <td id="comments_count"><%= render partial: 'book_comments/count', locals: { book: @book } %>                </td>
           <td>
             <% if @book.user == current_user %>
               <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success edit_book_#{@book.id}" %>
