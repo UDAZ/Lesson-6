@@ -185,7 +185,9 @@ end
 ```
 </details>
 
-### ①favoritesコントローラーの変更
+### ①コントローラーの変更
+
+#### ①favoritesコントローラーの変更
 ```
 class FavoritesController < ApplicationController
   def create
@@ -202,7 +204,7 @@ class FavoritesController < ApplicationController
 end
 
 ```
-### ②book_commentsコントローラーの変更
+#### ②book_commentsコントローラーの変更
 ```
 class BookCommentsController < ApplicationController
     
