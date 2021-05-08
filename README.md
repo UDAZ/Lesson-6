@@ -1,5 +1,6 @@
-# Lesson-3 いいねとコメント
-
+# Lesson-6 いいねとコメントの非同期実装
+<details>
+<summary>**通常実装までをクリックで展開**</summary>
 ## コメント機能
 
 ### ①モデル作成
@@ -181,3 +182,4 @@ class FavoritesController < ApplicationController
   end
 end
 ```
+</details>
