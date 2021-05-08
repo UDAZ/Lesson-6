@@ -284,4 +284,73 @@ end
 ```
 コメント件数：<%= book.book_comments.count %>
 ```
+#### ⑤book_comments/_error.html.erbの作成
 ### ③_indexとshowのviewを変更
+show.html.erb
+```
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-3'>
+      <h2>User info</h2>
+      <%= render 'users/info', user: @book.user %>
+      <h2 class="mt-3">New book</h2>
+      <%= render 'books/form', book: Book.new %>
+    </div>
+    <div class='col-md-8 offset-md-1'>
+  		<h2>Book detail</h2>
+  		<table class='table'>
+  		  <tr>
+  		    <td><%= link_to user_path(@book.user) do %>
+            <%= attachment_image_tag(@book.user, :profile_image, :fill, 100, 100, fallback: "no-image-icon.jpg") %><br>
+            <%= @book.user.name %>
+            <% end %>
+          </td>
+          <td><%= link_to @book.title, book_path(@book) %></td>
+          <td><%= @book.body %></td>
+          <td id="comment-count"><%= render 'book_comments/count', book: @book %></td>
+          <td><%= render 'favorites/fav', book: @book %></td>
+          <td>
+            <% if @book.user == current_user %>
+              <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success edit_book_#{@book.id}" %>
+            <% end %>
+          </td>
+          <td>
+            <% if @book.user == current_user %>
+              <%= link_to 'Destroy', book_path(@book), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger destroy_book_#{@book.id}"%>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+      <div class='comments'><%= render 'book_comments/index', book: @book %></div>
+      <div id="error_explanation"><%= render 'book_comments/error', comment: @comment %></div>
+      <div class="new-comment"><%= render 'book_comments/form', {book: @book, comment: @comment} %></div>
+  </div>
+</div>
+```
+_index.html.erb
+```
+<table class='table table-hover table-inverse'>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Title</th>
+      <th>Opinion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% books.each do |book| %>
+      <tr>
+        <td><%= link_to user_path(book.user) do %>
+          <%= attachment_image_tag(book.user, :profile_image, :fill, 50, 50, fallback: "no-image-icon.jpg") %>
+          <% end %>
+        </td>
+        <td><%= link_to book.title, book_path(book), class: "book_#{book.id}" %></td>
+        <td><%= book.body %></td>
+        <td id="comment-count"><%= render 'book_comments/count', book: book %></td></td>
+        <td><%= render 'favorites/fav', book: book %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+```
