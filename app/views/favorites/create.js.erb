@@ -1,0 +1,1 @@
+$('#favs_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/fav', locals: {book: @book}) %>");
