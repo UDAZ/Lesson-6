@@ -284,3 +284,4 @@ end
 ```
 コメント件数：<%= book.book_comments.count %>
 ```
+### ③_indexとshowのviewを変更
