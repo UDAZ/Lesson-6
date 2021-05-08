@@ -31,8 +31,8 @@
           </td>
         </tr>
       </table>
-      <div class='comments'><%= render 'book_comments/index', book: @book %></div>
+      <div id='comments'><%= render 'book_comments/index', book: @book %></div>
       <div id="error_explanation"><%= render 'book_comments/error', comment: @comment %></div>
-      <div class="new-comment"><%= render 'book_comments/form', {book: @book, comment: @comment} %></div>
+      <div id="new-comment"><%= render 'book_comments/form', {book: @book, comment: @comment} %></div>
   </div>
 </div>
