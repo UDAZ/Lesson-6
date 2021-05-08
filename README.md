@@ -217,7 +217,9 @@ class BookCommentsController < ApplicationController
     end
     
     def destroy
-        BookComment.find_by(id: params[:id], book_id: params[:book_id]).destroy
+        @book = Book.find(params[:book_id])
+        @comment = BookComment.find_by(id: params[:id], book_id: params[:book_id])
+        @comment.destroy
     end
     
     private
@@ -257,7 +259,7 @@ end
                 <td>
                   <% if book_comment.user == current_user %>
                     <div class="comment-delete">
-                      <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-sm btn-danger destroy_book_#{@book.id}" %>
+                      <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, remote: true, class: "btn btn-sm btn-danger destroy_book_#{@book.id}" %>
                       </div>
                   <% end %>
                     </td>
@@ -269,15 +271,6 @@ end
 #### ③book_comments/_form.html.erbの作成
 ```
         <%= form_with(model:[book, comment], remote: true) do |f| %>
-          <% if comment.errors.any? %>
-            <div id="error_explanation">
-              <ul>
-                <% comment.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
           <%= f.text_area :comment, rows:'3',placeholder: "コメントをここに", :style=>"width:100%;" %>
           <%= f.submit "送信する" %>
         <% end %>
@@ -287,8 +280,17 @@ end
 コメント件数：<%= book.book_comments.count %>
 ```
 #### ⑤book_comments/_error.html.erbの作成
+```
+          <% if comment.errors.any? %>
+              <ul>
+                <% comment.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+          <% end %>
+```
 ### ③_indexとshowのviewを変更
-show.html.erb
+books/show.html.erb
 ```
 <div class='container'>
   <div class='row'>
@@ -310,7 +312,7 @@ show.html.erb
           <td><%= link_to @book.title, book_path(@book) %></td>
           <td><%= @book.body %></td>
           <td id="comment-count"><%= render 'book_comments/count', book: @book %></td>
-          <td><%= render 'favorites/fav', book: @book %></td>
+          <td id="favs_buttons_<%= @book.id %>"><%= render 'favorites/fav', book: @book %></td>
           <td>
             <% if @book.user == current_user %>
               <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success edit_book_#{@book.id}" %>
@@ -323,13 +325,13 @@ show.html.erb
           </td>
         </tr>
       </table>
-      <div class='comments'><%= render 'book_comments/index', book: @book %></div>
+      <div id='comments'><%= render 'book_comments/index', {book: @book} %></div>
       <div id="error_explanation"><%= render 'book_comments/error', comment: @comment %></div>
-      <div class="new-comment"><%= render 'book_comments/form', {book: @book, comment: @comment} %></div>
+      <div id="new-comment"><%= render 'book_comments/form', {book: @book, comment: @comment} %></div>
   </div>
 </div>
 ```
-_index.html.erb
+books/_index.html.erb
 ```
 <table class='table table-hover table-inverse'>
   <thead>
@@ -350,9 +352,30 @@ _index.html.erb
         <td><%= link_to book.title, book_path(book), class: "book_#{book.id}" %></td>
         <td><%= book.body %></td>
         <td id="comment-count"><%= render 'book_comments/count', book: book %></td></td>
-        <td><%= render 'favorites/fav', book: book %></td>
+        <td id="favs_buttons_<%= book.id %>"><%= render 'favorites/fav', book: book %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+```
+### ④jqueryの記述
+#### ①book_comments/create.js.erb
+```
+jQuery("#comment-count").html("<%= j(render 'book_comments/count', { book: @book }) %>");
+jQuery("#comments").html("<%= j(render 'book_comments/index', { book: @book }) %>");
+jQuery("#error_explanation").html("<%= j(render 'book_comments/error', { comment: @comment }) %>");
+jQuery("#book_comment_comment").val("");
+```
+#### ②book_comments/destroy.js.erb
+```
+jQuery("#comments").html("<%= j(render 'book_comments/index', { book: @book }) %>");
+jQuery("#comment-count").html("<%= j(render 'book_comments/count', { book: @book }) %>");
+```
+#### ③favorites/create.js.erb
+```
+$('#favs_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/fav', locals: {book: @book}) %>");
+```
+#### ④favorites/destroy.js.erb
+```
+$('#favs_buttons_<%= @book.id %>').html("<%= j(render partial: 'favorites/fav', locals: {book: @book}) %>");
 ```
