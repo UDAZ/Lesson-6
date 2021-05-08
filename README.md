@@ -1,6 +1,7 @@
 # Lesson-6 いいねとコメントの非同期実装
 <details>
-<summary>**通常実装までをクリックで展開**</summary>
+<summary>通常実装までをクリックで展開</summary>
+
 ## コメント機能
 
 ### ①モデル作成
