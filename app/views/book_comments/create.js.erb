@@ -1,4 +1,4 @@
-jQuery("#comment_count").html("<%= j(render 'book_comments/count', { book: @book }) %>");
+jQuery("#comment-count").html("<%= j(render 'book_comments/count', { book: @book }) %>");
 jQuery("#comments").html("<%= j(render 'book_comments/index', { book: @book }) %>");
 jQuery("#error_explanation").html("<%= j(render 'book_comments/error', { comment: @comment }) %>");
 jQuery("#book_comment_comment").val("");
