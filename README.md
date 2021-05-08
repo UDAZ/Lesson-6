@@ -186,7 +186,6 @@ end
 </details>
 
 ### ①コントローラーの変更
-
 #### ①favoritesコントローラーの変更
 ```
 class FavoritesController < ApplicationController
@@ -227,3 +226,19 @@ class BookCommentsController < ApplicationController
     
 end
 ```
+### ②viewのテンプレート可および変更
+#### ①_fav.html.viewの変更
+```
+<% if book.favorited_by?(current_user) %>
+    <%= link_to book_favorites_path(book), :style=>"color:red;", method: :delete, remote: true do %>
+        ♥<%= book.favorites.count %>
+    <% end %>
+<% else %>
+    <%= link_to book_favorites_path(book), :style=>"color:blue;", method: :post, remote: true do %>
+        ♥<%= book.favorites.count %>
+    <% end %>
+<% end %>
+```
+#### ②book_comments/_index.html.erbの作成
+#### ③book_comments/_form.html.erbの作成
+#### ④book_comments/_count.html.erbの作成
