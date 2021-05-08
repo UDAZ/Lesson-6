@@ -1,6 +1,6 @@
       <table class='table'>
         <t-body>
-          <% @book.book_comments.each do |book_comment| %>
+          <% book.book_comments.each do |book_comment| %>
             <tr><% unless book_comment.id.nil? %>
                 <td>
                   <%= link_to user_path(book_comment.user) do %>

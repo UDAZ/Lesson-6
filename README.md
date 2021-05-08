@@ -240,5 +240,47 @@ end
 <% end %>
 ```
 #### ②book_comments/_index.html.erbの作成
+```
+      <table class='table'>
+        <t-body>
+          <% book.book_comments.each do |book_comment| %>
+            <tr><% unless book_comment.id.nil? %>
+                <td>
+                  <%= link_to user_path(book_comment.user) do %>
+                    <%= attachment_image_tag(book_comment.user, :profile_image, :fill, 100, 100, fallback: "no-image-icon.jpg") %><br>
+                    <%= book_comment.user.name %>
+                  <% end %>
+                </td>
+                <td><%= book_comment.comment %></td>
+                <td>
+                  <% if book_comment.user == current_user %>
+                    <div class="comment-delete">
+                      <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-sm btn-danger destroy_book_#{@book.id}" %>
+                      </div>
+                  <% end %>
+                    </td>
+            <% end %></tr>
+          <% end %>
+        </t-body>
+      </table>
+```
 #### ③book_comments/_form.html.erbの作成
+```
+        <%= form_with(model:[book, comment], remote: true) do |f| %>
+          <% if comment.errors.any? %>
+            <div id="error_explanation">
+              <ul>
+                <% comment.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <%= f.text_area :comment, rows:'3',placeholder: "コメントをここに", :style=>"width:100%;" %>
+          <%= f.submit "送信する" %>
+        <% end %>
+```
 #### ④book_comments/_count.html.erbの作成
+```
+コメント件数：<%= book.book_comments.count %>
+```
